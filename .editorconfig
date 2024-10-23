@@ -1,0 +1,10 @@
+# 이 파일이 최상위 .editorconfig 파일임을 선언
+root = true
+
+# 모든 파일에 대한 기본 설정
+[*]
+end_of_line = lf            # 줄바꿈 방식: LF (유닉스 스타일)
+insert_final_newline = true  # 파일의 마지막에 새로운 줄 추가
+charset = utf-8             # 파일 인코딩을 UTF-8로 설정
+indent_style = space        # 들여쓰기를 공백으로 설정
+indent_size = 2             # 들여쓰기 크기를 2칸으로 설정
