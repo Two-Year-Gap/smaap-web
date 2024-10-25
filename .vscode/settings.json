@@ -8,4 +8,4 @@
   "typescript.tsdk": ".yarn/sdks/typescript/lib",
   "typescript.enablePromptUseWorkspaceTsdk": true
 }
-// vscode에서 타입스크립트 경로 인식할 수 있도록
+// pnp환경에서 vscode가 타입스크립트 경로 인식할 수 있도록
