@@ -1,11 +1,14 @@
 import './App.css';
+import Header from './components/Header/Header';
+import NaverMap from './components/NaverMap/NaverMap';
 
 function App() {
   return (
-    <div>
-      <h1>초기 세팅 끝!</h1>
-      <button>asdfjl</button>
-      <input value={'asdf'} />
+    <div className="layout">
+      <Header />
+      <div className="map-container">
+        <NaverMap />
+      </div>
     </div>
   );
 }
