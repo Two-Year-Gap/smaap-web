@@ -1,12 +1,11 @@
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import './NaverMap.css';
 
 const NaverMap = () => {
   const mapRef = useRef<HTMLDivElement>(null);
+  const [loading, setLoading] = useState(true);
 
-  // 스크립트 로드 후 지도 초기화
-
-  // 지도 초기화만 수행.
+  // 스크립트 로드 후 지도 초기화만 수행.
   useEffect(() => {
     if (!mapRef.current || !window.naver) return;
 
@@ -21,9 +20,19 @@ const NaverMap = () => {
       position: new window.naver.maps.LatLng(37.5665, 126.978),
       map: map,
     });
+
+    // 로딩 완료 처리
+    setLoading(false);
   }, []);
 
-  return <div className="map" ref={mapRef}></div>;
+  return (
+    <>
+      {loading && (
+        <div className="loading-overlay">지도를 불러오는 중입니다...</div>
+      )}
+      <div className="map" ref={mapRef}></div>
+    </>
+  );
 };
 
 export default NaverMap;
