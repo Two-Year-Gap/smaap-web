@@ -25,8 +25,19 @@ module.exports = {
     //'pnp', // pnp환경에서 ESlint 적용
   ],
   rules: {
-    '@typescript-eslint/no-unused-vars': ['warn'], // 사용되지 않는 변수 경고
     'react/react-in-jsx-scope': 'off', // React 17 이상에서는 불필요한 규칙
+    'react/jsx-uses-react': 'off', // React 17+에서는 불필요
+    '@typescript-eslint/explicit-module-boundary-types': 'off', // 함수 반환 타입 명시 강제하지 않음
+    // 컴포넌트를 화살표 함수로 작성하도록 강제
+    'react/function-component-definition': [
+      'error',
+      {
+        namedComponents: 'arrow-function',
+        unnamedComponents: 'arrow-function',
+      },
+    ],
+
+    '@typescript-eslint/no-unused-vars': ['warn'], // 사용되지 않는 변수 경고
     'no-console': process.env.NODE_ENV === 'production' ? 'error' : 'off',
 
     // 추가적인 규칙을 설정할 수 있음
