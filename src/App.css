@@ -7,11 +7,15 @@ body,
 }
 
 body {
-  /* @apply fontFamily-sans lineHeight-relaxed; */
+  font-family: Pretendard, system-ui, sans-serif;
   font-size: var(--font-base-size);
   line-height: 1.5;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
+
+button {
+  cursor: pointer;
 }
 
 .layout {
@@ -19,7 +23,19 @@ body {
   overflow: hidden;
 }
 
+.dropdown-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  min-width: 50%;
+  position: absolute;
+  top: 32px;
+  left: calc(50% - (50% / 2));
+  z-index: 1;
+}
+
 .map-container {
+  position: relative;
   width: 100%;
   height: calc(100vh - 60px);
 }
