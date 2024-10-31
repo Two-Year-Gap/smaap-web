@@ -1,6 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import App from './App';
+import { MapProvider } from './contexts/MapContext';
 import './index.css';
 
 // 네이버 지도 스크립트 동적 추가
@@ -26,7 +27,9 @@ const loadNaverMapScript = async () => {
   );
   root.render(
     <React.StrictMode>
-      <App />
+      <MapProvider>
+        <App />
+      </MapProvider>
     </React.StrictMode>,
   );
 })();
