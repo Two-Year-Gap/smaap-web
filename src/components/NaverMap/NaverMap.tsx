@@ -1,54 +1,94 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useMap } from 'src/contexts/MapContext';
+import useNaverMap from 'src/hooks/useNaverMap';
+import { useTM128 } from 'src/hooks/useTM128';
+import { schools } from '../../data/schools';
 import './NaverMap.css';
 
-const NaverMap = () => {
-  const mapRef = useRef<HTMLDivElement>(null);
-  const { map, setMapInstance, userCoordinates } = useMap();
-  const [loading, setLoading] = useState(true);
+interface NaverMapProps {
+  mapData: {
+    type: '학교 검색' | '업종 선택' | '분석 개요';
+    coordinates?: { latitude: number; longitude: number };
+    radius?: number;
+    name?: string;
+  } | null;
+}
 
-  // 기본 좌표 설정 (사용자가 위치를 제공하지 않는 경우)
-  const defaultCoordinates = { latitude: 37.5665, longitude: 126.978 };
+const NaverMap = ({ mapData }: NaverMapProps) => {
+  const defaultCoordinates = { latitude: 35.8714, longitude: 128.6014 }; // 기본 좌표
+  const { mapRef, loading } = useNaverMap({
+    initialCoordinates: defaultCoordinates,
+  });
+  const { map } = useMap();
+  const { toTM128 } = useTM128();
+  const [schoolCircle, setSchoolCircle] = useState<naver.maps.Circle | null>(
+    null,
+  ); // 학교 검색
 
-  // 스크립트 로드 후 지도 초기화만 수행.
+  // 모든 학교에 마커 추가
   useEffect(() => {
-    // 지도 초기화 한 번만 수행
-    if (!mapRef.current || !window.naver || map) return;
+    if (!map) return;
 
-    // userCoordinates가 없으면 기본 좌표 사용
-    const initialCoordinates = userCoordinates || defaultCoordinates;
+    schools.forEach((school) => {
+      // WGS84 좌표를 TM128로 변환
+      const tm128Position = toTM128({
+        latitude: school.latitude,
+        longitude: school.longitude,
+      });
 
-    // 지도 생성
-    const newMap = new window.naver.maps.Map(mapRef.current, {
-      center: new window.naver.maps.LatLng(
-        initialCoordinates.latitude,
-        initialCoordinates.longitude,
-      ),
-      zoom: 18,
+      // 마커 생성
+      const marker = new window.naver.maps.Marker({
+        position: tm128Position,
+        map: map,
+      });
+
+      // 학교 이름을 표시하는 InfoWindow 생성
+      const infoWindow = new window.naver.maps.InfoWindow({
+        content: `<div class="info-window">${school.name}</div>`,
+        disableAutoPan: true,
+        borderWidth: 0,
+        backgroundColor: 'transparent',
+      });
+
+      // 마커 아래에 InfoWindow 표시
+      //infoWindow.open(map, marker);
+
+      // 마커 클릭 시 InfoWindow 열기
+      window.naver.maps.Event.addListener(marker, 'click', () => {
+        infoWindow.open(map, marker);
+      });
     });
-
-    // 지도 인스턴스를 전역 상태로 설정
-    setMapInstance(newMap);
-
-    setLoading(false); // 로딩 완료 처리
-  }, [setMapInstance, map, userCoordinates]);
-
+  }, [map, schools]);
+  /*
+  // 특정 학교 선택 시 해당 좌표에만 500m 원 추가
   useEffect(() => {
-    if (!map || !userCoordinates) return; // map과 userCoordinates가 모두 있어야 실행
+    if (!map || !schoolCoordinates) return;
 
-    // 사용자 위치로 지도 중심 설정
-    const userLatLng = new window.naver.maps.LatLng(
-      userCoordinates.latitude,
-      userCoordinates.longitude,
+    // 기존의 원을 제거
+    if (schoolCircle) {
+      schoolCircle.setMap(null);
+    }
+
+    const schoolLatLng = new window.naver.maps.LatLng(
+      schoolCoordinates.latitude,
+      schoolCoordinates.longitude,
     );
-    map.setCenter(userLatLng);
 
-    // 마커 추가
-    new window.naver.maps.Marker({
-      position: new window.naver.maps.LatLng(35.8695, 128.5941),
+    // 새로운 500m 반경 원을 추가
+    const newCircle = new window.naver.maps.Circle({
       map: map,
+      center: schoolLatLng,
+      radius: 500,
+      strokeColor: '#1d4fff',
+      strokeOpacity: 0.5,
+      strokeWeight: 2,
+      fillColor: '#60a5fa',
+      fillOpacity: 0.3,
     });
-  }, [map, userCoordinates]); // userCoordinates 변경 시에만 실행
+
+    setSchoolCircle(newCircle);
+  }, [map, schoolCoordinates, schoolCircle, toTM128]);
+  */
 
   return (
     <>

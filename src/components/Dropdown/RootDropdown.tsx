@@ -1,5 +1,5 @@
-import { useMap } from 'src/contexts/MapContext';
 import { ReactComponent as LocationIcon } from '../../assets/location_on.svg';
+import { useMap } from '../../contexts/MapContext';
 
 const RootDropdown = () => {
   const { userCity } = useMap(); // MapContext에서 사용자 위치 가져오기

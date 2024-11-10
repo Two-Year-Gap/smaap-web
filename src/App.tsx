@@ -1,32 +1,61 @@
+import { useState } from 'react';
 import './App.css';
-import Dropdown from './components/Dropdown/Dropdown';
-import RootDropdown from './components/Dropdown/RootDropdown';
+import temp from './assets/temp.png';
+import DropdownBar from './components/Dropdown/DropdownBar';
 import Header from './components/Header/Header';
+import Menu from './components/Menu/Menu';
 import NaverMap from './components/NaverMap/NaverMap';
 
+type MapData = {
+  type: '학교 검색' | '업종 선택' | '분석 개요';
+  coordinates?: { latitude: number; longitude: number };
+  radius?: number;
+  name?: string;
+} | null;
+
 const App = () => {
+  const [mapData, setMapData] = useState<MapData>(null);
+
+  const handleSchoolSearch = (
+    latitude: number,
+    longitude: number,
+    name: string,
+  ) => {
+    setMapData({
+      type: '학교 검색',
+      coordinates: { latitude, longitude },
+      radius: 500,
+      name,
+    });
+  };
+
+  const handleBusinessSelect = (latitude: number, longitude: number) => {
+    setMapData({
+      type: '업종 선택',
+      coordinates: { latitude, longitude },
+    });
+  };
+
+  const handleAnalysisOverview = () => {
+    setMapData({
+      type: '분석 개요',
+    });
+  };
+
   return (
     <div className="layout">
       <Header />
       <div className="map-container">
         <div className="dropdown-container">
-          {/* 47%, 722px */}
-          <RootDropdown />
-          <Dropdown
-            label="학교 구분"
-            items={['전체', '초등학교', '중학교', '고등학교']}
-          />
-          <Dropdown
-            label="공학 구분"
-            items={['전체', '남녀공학', '남', '여']}
-          />
-          <Dropdown label="구 구분" items={['전체', '중구', '동구', '서구']} />
-          <Dropdown
-            label="동 구분"
-            items={['전체', '남산동', '대봉동', '대신동']}
-          />
+          <DropdownBar />
         </div>
-        <NaverMap />
+        <NaverMap mapData={mapData} />
+        <Menu
+          onSchoolSearch={handleSchoolSearch}
+          onBusinessSelect={handleBusinessSelect}
+          onAnalysisOverview={handleAnalysisOverview}
+        />
+        <img alt="school-info" src={temp} />
       </div>
     </div>
   );
