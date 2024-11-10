@@ -1,0 +1,36 @@
+.school-search {
+  display: flex;
+  flex-direction: column;
+  background: #fff;
+}
+
+.search-wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 16px 20px;
+  border-radius: 0px 0px 8px 8px;
+}
+
+.school-list {
+  display: flex;
+  flex-direction: column;
+  padding: 16px 20px;
+  border-radius: 0px 0px 8px 8px;
+  border-top: 1px solid #ccc;
+  background: #fff;
+}
+
+.school-item {
+  width: 100%;
+  padding: 12px 0 12px 10px;
+  border-top: 1px solid #ccc;
+  cursor: pointer;
+}
+.school-item:first-child {
+  border-top: none;
+  padding-top: 0;
+}
+.school-item.selected {
+  color: var(--secondary-color) !important;
+}
