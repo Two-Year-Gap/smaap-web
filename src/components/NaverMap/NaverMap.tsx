@@ -8,7 +8,7 @@ const NaverMap = () => {
   const [loading, setLoading] = useState(true);
 
   // 기본 좌표 설정 (사용자가 위치를 제공하지 않는 경우)
-  const defaultCoordinates = { latitude: 37.5665, longitude: 126.978 };
+  const defaultCoordinates = { latitude: 35.8714, longitude: 128.6014 };
 
   // 스크립트 로드 후 지도 초기화만 수행.
   useEffect(() => {

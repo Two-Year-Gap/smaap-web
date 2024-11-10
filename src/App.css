@@ -25,12 +25,12 @@ button {
 
 .dropdown-container {
   display: flex;
-  justify-content: space-between;
-  align-items: center;
-  min-width: 50%;
+  justify-content: center;
+  width: 100%;
   position: absolute;
   top: 32px;
-  left: calc(50% - (50% / 2));
+  left: 50%;
+  transform: translateX(-50%);
   z-index: 1;
 }
 
@@ -38,4 +38,13 @@ button {
   position: relative;
   width: 100%;
   height: calc(100vh - 60px);
+}
+
+.map-container > img {
+  transform: scale(0.9); /* 이미지를 0.8배로 줄임 */
+  transform-origin: center; /* 이미지를 중앙 기준으로 축소 */
+  position: absolute;
+  top: 100px;
+  right: 60px;
+  z-index: 1;
 }
