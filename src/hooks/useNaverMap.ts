@@ -22,7 +22,7 @@ const useNaverMap = ({ initialCoordinates }: UseNaverMapOptions) => {
         initialCenter.latitude,
         initialCenter.longitude,
       ),
-      zoom: 18,
+      zoom: 16,
     });
 
     setMapInstance(newMap); // 지도 인스턴스를 전역 상태로 설정
