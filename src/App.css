@@ -48,3 +48,11 @@ button {
   right: 60px;
   z-index: 1;
 }
+
+.map-container > img[alt='range-modal'] {
+  position: absolute;
+  top: 320px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 1;
+}
