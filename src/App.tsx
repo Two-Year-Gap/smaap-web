@@ -1,21 +1,19 @@
 import { useState } from 'react';
 import './App.css';
 import temp from './assets/temp.png';
+import temp2 from './assets/temp2.png';
 import DropdownBar from './components/Dropdown/DropdownBar';
 import Header from './components/Header/Header';
 import Menu from './components/Menu/Menu';
 import NaverMap from './components/NaverMap/NaverMap';
 
-type MapData = {
-  type: '학교 검색' | '업종 선택' | '분석 개요';
-  coordinates?: { latitude: number; longitude: number };
-  radius?: number;
-  name?: string;
-} | null;
+type MenuOption = '학교 선택' | '업종 선택' | '분석 개요';
 
 const App = () => {
-  const [mapData, setMapData] = useState<MapData>(null);
+  const [selected, setSelected] = useState<MenuOption>('학교 선택');
 
+  /*
+  선택한 학교셋 데이터 MapData로 포맷해서 전달.?
   const handleSchoolSearch = (
     latitude: number,
     longitude: number,
@@ -25,22 +23,10 @@ const App = () => {
       type: '학교 검색',
       coordinates: { latitude, longitude },
       radius: 500,
-      name,
+      school_name: name,
     });
   };
-
-  const handleBusinessSelect = (latitude: number, longitude: number) => {
-    setMapData({
-      type: '업종 선택',
-      coordinates: { latitude, longitude },
-    });
-  };
-
-  const handleAnalysisOverview = () => {
-    setMapData({
-      type: '분석 개요',
-    });
-  };
+  */
 
   return (
     <div className="layout">
@@ -49,13 +35,10 @@ const App = () => {
         <div className="dropdown-container">
           <DropdownBar />
         </div>
-        <NaverMap mapData={mapData} />
-        <Menu
-          onSchoolSearch={handleSchoolSearch}
-          onBusinessSelect={handleBusinessSelect}
-          onAnalysisOverview={handleAnalysisOverview}
-        />
-        <img alt="school-info" src={temp} />
+        <NaverMap selected={selected} />
+        <Menu selected={selected} setSelected={setSelected} />
+        <img src={temp} alt="school-info" />
+        <img src={temp2} alt="range-modal" />
       </div>
     </div>
   );

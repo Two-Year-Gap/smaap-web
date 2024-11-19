@@ -1,29 +1,23 @@
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import { useMap } from 'src/contexts/MapContext';
 import useNaverMap from 'src/hooks/useNaverMap';
 import { useTM128 } from 'src/hooks/useTM128';
 import { schools } from '../../data/schools';
 import './NaverMap.css';
 
+type MenuOption = '학교 선택' | '업종 선택' | '분석 개요';
+
 interface NaverMapProps {
-  mapData: {
-    type: '학교 검색' | '업종 선택' | '분석 개요';
-    coordinates?: { latitude: number; longitude: number };
-    radius?: number;
-    name?: string;
-  } | null;
+  selected: MenuOption;
 }
 
-const NaverMap = ({ mapData }: NaverMapProps) => {
+const NaverMap = ({ selected }: NaverMapProps) => {
   const defaultCoordinates = { latitude: 35.8714, longitude: 128.6014 }; // 기본 좌표
   const { mapRef, loading } = useNaverMap({
     initialCoordinates: defaultCoordinates,
   });
   const { map } = useMap();
   const { toTM128 } = useTM128();
-  const [schoolCircle, setSchoolCircle] = useState<naver.maps.Circle | null>(
-    null,
-  ); // 학교 검색
 
   // 모든 학교에 마커 추가
   useEffect(() => {
