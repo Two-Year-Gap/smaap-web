@@ -4,13 +4,14 @@
   align-items: center;
   padding: 8px 0px;
 
+  border-radius: 4px;
+  background: #1d4fff;
   color: #fff;
   font-size: 16px;
   font-style: normal;
   font-weight: 700;
   line-height: normal;
-  border-radius: 4px;
-  background: #1d4fff;
+  user-select: none;
 }
 .btn:hover {
   color: #1e3a8a;

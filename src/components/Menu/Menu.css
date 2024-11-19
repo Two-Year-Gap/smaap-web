@@ -5,16 +5,16 @@
   left: 60px;
   top: 100px;
   z-index: 1;
+  width: 349px;
+  box-shadow: 4px 4px 16px 0px rgba(0, 0, 0, 0.2);
 }
 
 .menu-bar {
   display: flex;
-  width: 349px;
   padding: 12px 0px;
   justify-content: center;
   align-items: center;
   gap: 14px;
-
   border-radius: 8px 8px 0px 0px;
   border-bottom: 0.5px solid #ccc;
   background: #fff;
@@ -33,9 +33,9 @@
   font-weight: 700;
   line-height: normal;
   border-radius: 4px;
-  border: 1px solid var(--border-gray-color);
+  border: 2px solid var(--border-gray-color);
 }
 .menu-btn.selected {
   color: var(--secondary-color);
-  border: 1px solid var(--secondary-color);
+  border: 2px solid var(--secondary-color);
 }
