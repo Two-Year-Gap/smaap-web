@@ -3,6 +3,7 @@ import ReactDOM from 'react-dom/client';
 import App from './App';
 import { BusinessProvider } from './contexts/BusinessContext';
 import { MapProvider } from './contexts/MapContext';
+import { MenuOptionProvider } from './contexts/MenuOptionContext';
 import { SchoolProvider } from './contexts/SchoolContext';
 import './index.css';
 
@@ -29,13 +30,15 @@ const loadNaverMapScript = async () => {
   );
   root.render(
     <React.StrictMode>
-      <MapProvider>
-        <SchoolProvider>
-          <BusinessProvider>
-            <App />
-          </BusinessProvider>
-        </SchoolProvider>
-      </MapProvider>
+      <MenuOptionProvider>
+        <MapProvider>
+          <SchoolProvider>
+            <BusinessProvider>
+              <App />
+            </BusinessProvider>
+          </SchoolProvider>
+        </MapProvider>
+      </MenuOptionProvider>
     </React.StrictMode>,
   );
 })();

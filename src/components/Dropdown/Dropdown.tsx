@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { ReactComponent as ArrowDownIcon } from '../../assets/keyboard_arrow_down.svg';
+import { ReactComponent as ArrowDownIcon } from '../../assets/arrow_down.svg';
 import './Dropdown.css';
 import DropdownItem from './DropdownItem';
 

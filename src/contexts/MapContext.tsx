@@ -6,24 +6,24 @@ interface MapProviderProps {
 }
 
 interface MapContextType {
-  map: naver.maps.Map | null; // 지도 인스턴스 객체
+  map: NaverMap | null; // 지도 인스턴스 객체
   userCity: string; // 사용자 시도별 위치를 저장할 상태
   userCoordinates: { latitude: number; longitude: number } | null; // 사용자 좌표 상태
-  setMapInstance: (mapInstance: naver.maps.Map) => void; // map 인스턴스를 설정하는 함수
+  setMapInstance: (mapInstance: NaverMap) => void; // map 인스턴스를 설정하는 함수
 }
 
 const MapContext = createContext<MapContextType | undefined>(undefined);
 
 export const MapProvider = ({ children }: MapProviderProps) => {
-  const [map, setMap] = useState<naver.maps.Map | null>(null);
+  const [map, setMap] = useState<NaverMap | null>(null);
   const [userCity, setUserCity] = useState(''); // 사용자 시도별 위치
   const [userCoordinates, setUserCoordinates] = useState<{
     latitude: number;
     longitude: number;
-  } | null>(null);
+  } | null>(null); // 사용자 좌표
 
   // map 인스턴스를 설정하는 함수
-  const setMapInstance = (mapInstance: naver.maps.Map) => {
+  const setMapInstance = (mapInstance: NaverMap) => {
     setMap(mapInstance);
   };
 
@@ -79,7 +79,7 @@ export const MapProvider = ({ children }: MapProviderProps) => {
   );
 };
 
-export const useMap = () => {
+export const useMapContext = () => {
   const context = useContext(MapContext);
   if (!context) {
     throw new Error('useMap은 MapProvider 내에서 사용해야 합니다.');

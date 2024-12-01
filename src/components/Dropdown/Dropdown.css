@@ -13,7 +13,7 @@
 .dropdown-label > span {
   flex: 1;
   color: #000;
-  font-size: 20px;
+  font-size: 18px;
   font-style: normal;
   font-weight: 400;
   line-height: normal;
@@ -57,7 +57,7 @@
 
 .dropdown-item > span {
   color: #000;
-  font-size: 20px;
+  font-size: 16px;
   font-style: normal;
   font-weight: 400;
   line-height: normal;
