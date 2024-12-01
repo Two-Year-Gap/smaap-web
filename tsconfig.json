@@ -15,7 +15,8 @@
     "resolveJsonModule": true,
     "isolatedModules": true,
     "noEmit": true,
-    "jsx": "react-jsx"
+    "jsx": "react-jsx",
+    "types": ["@types/navermaps"]
   },
-  "include": ["src"]
+  "include": ["src/**/*", "src/**/*.d.ts", "node_modules/@types"]
 }
