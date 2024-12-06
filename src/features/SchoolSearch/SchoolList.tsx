@@ -19,6 +19,7 @@ const SchoolList = ({ name }: SchoolListProps) => {
       if (!debouncedName && debouncedName !== '') return; // 디바운스된 값이 비어있으면 fetch하지 않음
       try {
         const schoolData = await fetchSchools({ name: debouncedName || '' });
+        console.log('fetch /schools', debouncedName);
         setSchools(schoolData);
       } catch (error) {
         console.error('Load schools error:', error);

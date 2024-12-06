@@ -8,7 +8,7 @@ const AnalysisInfo = () => {
     <div className="info-label analysis">
       <AnalysisIcon />
       <div className="label-container analysis">
-        <span>{selectedSchool?.name || '대구초등학교'}</span>
+        <span>{selectedSchool?.name}</span>
       </div>
     </div>
   );

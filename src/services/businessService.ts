@@ -4,7 +4,7 @@ import { Business } from '../types/business';
 // /business API 호출 및 아이콘 매핑 함수
 export const fetchBusinesses = async (): Promise<Business[]> => {
   try {
-    const response = await axiosInstance.get<Business[]>('/business');
+    const response = await axiosInstance.get<Business[]>('/businesses');
     const businesses = response.data.map((business) => ({
       ...business,
       // icon: businessIcons[business.id] || <AllIcon />, // TODO: 동적 SVG 매핑

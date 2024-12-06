@@ -8,7 +8,6 @@ import MenuBar from './MenuBar';
 const Menu = () => {
   const { selectedOption } = useMenuOptionContext();
 
-  // 선택된 메뉴에 따라 렌더링할 컴포넌트 결정
   let content;
   if (selectedOption === '학교 선택') {
     content = <SchoolSearch />;

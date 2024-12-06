@@ -1,5 +1,4 @@
 import { useBusinessContext } from 'src/contexts/BusinessContext';
-import { ReactComponent as AllIcon } from '../../assets/category/all.svg';
 import { ReactComponent as CategoryIcon } from '../../assets/label/business.svg';
 import './InfoLabel.css';
 
@@ -10,8 +9,8 @@ const BusinessInfo = () => {
       <CategoryIcon />
       <div className="label-container business">
         <div>
-          {selectedBusiness?.icon || <AllIcon />}
-          <span>{selectedBusiness?.name || '전체'}</span>
+          {selectedBusiness?.icon}
+          <span>{selectedBusiness?.name}</span>
         </div>
       </div>
     </div>

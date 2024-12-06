@@ -20,8 +20,6 @@ const App = () => {
         <SchoolInfo />
         <BusinessInfo />
         <AnalysisInfo />
-        {/* <img src={temp} alt="school-info" /> */}
-        {/* <img src={temp2} alt="range-modal" /> */}
       </div>
     </div>
   );
