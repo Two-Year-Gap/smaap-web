@@ -1,0 +1,32 @@
+.custom-marker {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background: white; /* 배경색 */
+  padding: 8px;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2); /* 그림자 추가 */
+  z-index: 9999; /* InfoWindow를 맨 위로 */
+  position: relative; /* z-index가 동작하도록 설정 */
+}
+
+.marker-content {
+  font-size: 14px;
+  font-weight: bold;
+  color: #333; /* 텍스트 색상 */
+  margin-bottom: 4px;
+}
+
+.marker-button {
+  padding: 4px 8px;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+.marker-button:hover {
+  background-color: #0056b3;
+}
