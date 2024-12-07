@@ -8,7 +8,7 @@ import '../styles/customMarkers.css';
 
 interface UseSchoolMarkersProps {
   map: NaverMap | null;
-  onModalOpen: (school: School) => void; // 모달 열기 핸들러
+  onModalOpen: (school: School) => void;
   onMarkerClick: (school: School) => void;
 }
 
@@ -57,24 +57,29 @@ const useSchoolMarkers = ({
       markersRef.current = [];
       infoWindowsRef.current = [];
 
-      // 조건 2: 3km 반경 내 학교 마커 표시
-      const center = map.getCenter() as naver.maps.LatLng;
-      const centerLat = center.lat();
-      const centerLng = center.lng();
+      if (selectedBusiness && selectedSchool) {
+        // 선택된 학교의 마커만 표시
+        createMarkerWithInfoWindow(selectedSchool, zoomLevel >= 16);
+      } else {
+        // 조건 2: 3km 반경 내 학교 마커 표시
+        const center = map.getCenter() as naver.maps.LatLng;
+        const centerLat = center.lat();
+        const centerLng = center.lng();
 
-      const filteredSchools = schools.filter((school) => {
-        const distance = calculateDistance(
-          centerLat,
-          centerLng,
-          school.latitude,
-          school.longitude,
+        const filteredSchools = schools.filter((school) => {
+          const distance = calculateDistance(
+            centerLat,
+            centerLng,
+            school.latitude,
+            school.longitude,
+          );
+          return distance <= 3000;
+        });
+
+        filteredSchools.forEach((school) =>
+          createMarkerWithInfoWindow(school, zoomLevel >= 16),
         );
-        return distance <= 3000;
-      });
-
-      filteredSchools.forEach((school) =>
-        createMarkerWithInfoWindow(school, zoomLevel >= 16),
-      );
+      }
     };
 
     const createMarkerWithInfoWindow = (school: School, showInfo: boolean) => {

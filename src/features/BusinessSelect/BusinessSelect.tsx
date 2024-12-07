@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import Btn from 'src/components/Button/Button';
 import { useBusinessContext } from 'src/contexts/BusinessContext';
+import { useMenuOptionContext } from 'src/contexts/MenuOptionContext';
 import { fetchBusinesses } from 'src/services/businessService';
 import { Business } from 'src/types/business';
 import { ReactComponent as AllIcon } from '../../assets/category/all.svg';
@@ -20,6 +21,7 @@ const businessesIcon = [
 
 const BusinessSelect = () => {
   const { selectedBusiness, setSelectedBusiness } = useBusinessContext();
+  const { setSelectedOption } = useMenuOptionContext();
   const [businesses, setBusinesses] = useState<Business[]>([]);
 
   useEffect(() => {
@@ -61,7 +63,7 @@ const BusinessSelect = () => {
               <div
                 key={business.id}
                 className={`select-category-item ${
-                  selectedBusiness === business ? 'selected' : ''
+                  selectedBusiness?.id === business.id ? 'selected' : ''
                 }`}
                 onClick={() => setSelectedBusiness(business)}
               >
@@ -71,7 +73,12 @@ const BusinessSelect = () => {
             ))}
           </div>
         </div>
-        <Btn text="선택" />
+        <Btn
+          text="선택"
+          onClick={() => {
+            setSelectedOption('분석 개요');
+          }}
+        />
       </div>
     </div>
   );
