@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { useNeighborhoodContext } from 'src/contexts/NeighborhoodContext';
 import {
   District,
   fetchDistricts,
@@ -12,6 +13,7 @@ const DropdownBar = () => {
   const [districts, setDistricts] = useState<District[]>([]);
   const [neighborhoods, setNeighborhoods] = useState<Neighborhood[]>([]);
   const [selectedDistrict, setSelectedDistrict] = useState<number | null>(null);
+  const { neighborhoodId, setNeighborhoodId } = useNeighborhoodContext();
   const [isLoading, setIsLoading] = useState<boolean>(true);
 
   useEffect(() => {
@@ -33,6 +35,7 @@ const DropdownBar = () => {
   useEffect(() => {
     if (!selectedDistrict) {
       setNeighborhoods([]);
+      setNeighborhoodId(null);
       return;
     }
 
@@ -49,7 +52,14 @@ const DropdownBar = () => {
     };
 
     loadNeighborhoods();
-  }, [selectedDistrict]);
+  }, [selectedDistrict, setNeighborhoodId]);
+
+  const handleNeighborhoodChange = (value: string) => {
+    const selectedNeighborhood = neighborhoods.find(
+      (neighborhood) => neighborhood.name === value,
+    );
+    setNeighborhoodId(selectedNeighborhood ? selectedNeighborhood.id : null); // Context 상태 업데이트
+  };
 
   return (
     <div className="dropdown-bar-wrapper">
@@ -78,6 +88,7 @@ const DropdownBar = () => {
               '전체',
               ...neighborhoods.map((neighborhood) => neighborhood.name),
             ]}
+            onChange={handleNeighborhoodChange} // Context 상태 업데이트
           />
         </>
       )}

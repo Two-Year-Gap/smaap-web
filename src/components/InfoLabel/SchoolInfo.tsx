@@ -5,18 +5,20 @@ import './InfoLabel.css';
 const SchoolInfo = () => {
   const { selectedSchool } = useSchoolContext();
   return (
-    <div className="info-label school">
+    <div className={`info-label school ${!selectedSchool ? 'hidden' : ''}`}>
       <SchoolIcon />
-      <div className="label-container school">
-        <div>
-          <h3>학생 수</h3>
-          <span>{selectedSchool?.studentCount}</span>
+      {selectedSchool && (
+        <div className="label-container school">
+          <div>
+            <h3>학생 수</h3>
+            <span>{selectedSchool?.studentCount}</span>
+          </div>
+          <div>
+            <h3>교원 수</h3>
+            <span>{selectedSchool?.employeeCount}</span>
+          </div>
         </div>
-        <div>
-          <h3>교원 수</h3>
-          <span>{selectedSchool?.employeeCount}</span>
-        </div>
-      </div>
+      )}
     </div>
   );
 };

@@ -7,6 +7,10 @@
   background: #fff;
   border-radius: 8px;
 }
+.info-label.hidden {
+  gap: 0; /* gap 제거 */
+  min-width: 0; /* min-width 제거 */
+}
 .info-label > svg {
   width: 30px;
   height: 30px;

@@ -5,7 +5,7 @@ import './InfoLabel.css';
 const BusinessInfo = () => {
   const { selectedBusiness } = useBusinessContext();
   return (
-    <div className="info-label business">
+    <div className={`info-label business ${!selectedBusiness ? 'hidden' : ''}`}>
       <CategoryIcon />
       <div className="label-container business">
         <div>
