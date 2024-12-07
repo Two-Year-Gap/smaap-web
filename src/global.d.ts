@@ -56,3 +56,36 @@ declare namespace naver.maps {
     };
   }
 }
+
+// Allow importing .geojson files
+declare module '*.geojson' {
+  export interface Geometry {
+    type: 'MultiPolygon'; // The geometry type for MultiPolygon
+    coordinates: number[][][][]; // Coordinates for MultiPolygon
+  }
+
+  export interface Properties {
+    adm_nm: string; // Administrative name, e.g., "대구광역시 북구 구암동"
+  }
+
+  export interface SimplifiedGeoJsonFeature {
+    type: 'Feature'; // The feature type
+    properties: Properties; // Properties of the feature
+    geometry: Geometry; // Geometry data of the feature
+  }
+
+  export interface SimplifiedGeoJson {
+    type: 'FeatureCollection'; // The GeoJSON type
+    name?: string; // Optional name for the GeoJSON dataset
+    crs?: {
+      type: string; // CRS type
+      properties: {
+        name: string; // CRS name
+      };
+    };
+    features: SimplifiedGeoJsonFeature[]; // Array of features
+  }
+
+  const value: SimplifiedGeoJson;
+  export default value;
+}
