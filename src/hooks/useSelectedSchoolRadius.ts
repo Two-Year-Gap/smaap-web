@@ -1,17 +1,16 @@
 import { useEffect, useRef } from 'react';
-import { School } from 'src/types/schools';
+import { useSchoolContext } from 'src/contexts/SchoolContext';
 
 interface useSelectedSchoolRadiusProps {
   map: NaverMap | null;
-  selectedSchool: School | null;
   radius: number;
 }
 
 const useSelectedSchoolRadius = ({
   map,
-  selectedSchool,
   radius,
 }: useSelectedSchoolRadiusProps) => {
+  const { selectedSchool } = useSchoolContext();
   const circleRef = useRef<naver.maps.Circle | null>(null); // 기존 원을 추적
 
   useEffect(() => {
