@@ -1,11 +1,38 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import App from './App';
+import { AnalysisProvider } from './contexts/AnalysisContext';
 import { BusinessProvider } from './contexts/BusinessContext';
 import { MapProvider } from './contexts/MapContext';
 import { MenuOptionProvider } from './contexts/MenuOptionContext';
+import { NeighborhoodProvider } from './contexts/NeighborhoodContext';
 import { SchoolProvider } from './contexts/SchoolContext';
 import './index.css';
+
+import {
+  ArcElement,
+  BarElement,
+  CategoryScale,
+  Chart as ChartJS,
+  Legend,
+  LinearScale,
+  LineElement,
+  PointElement,
+  Title,
+  Tooltip,
+} from 'chart.js';
+
+ChartJS.register(
+  ArcElement, // Pie/Donut 차트에서 사용
+  LineElement, // Line 차트에서 사용
+  PointElement,
+  BarElement,
+  CategoryScale,
+  LinearScale,
+  Title,
+  Tooltip,
+  Legend,
+);
 
 // 네이버 지도 스크립트 동적 추가
 const loadNaverMapScript = async () => {
@@ -30,15 +57,19 @@ const loadNaverMapScript = async () => {
   );
   root.render(
     <React.StrictMode>
-      <MenuOptionProvider>
-        <MapProvider>
-          <SchoolProvider>
-            <BusinessProvider>
-              <App />
-            </BusinessProvider>
-          </SchoolProvider>
-        </MapProvider>
-      </MenuOptionProvider>
+      <NeighborhoodProvider>
+        <MenuOptionProvider>
+          <MapProvider>
+            <SchoolProvider>
+              <BusinessProvider>
+                <AnalysisProvider>
+                  <App />
+                </AnalysisProvider>
+              </BusinessProvider>
+            </SchoolProvider>
+          </MapProvider>
+        </MenuOptionProvider>
+      </NeighborhoodProvider>
     </React.StrictMode>,
   );
 })();

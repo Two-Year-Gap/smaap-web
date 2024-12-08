@@ -5,7 +5,11 @@ import SchoolSearch from 'src/features/SchoolSearch/SchoolSearch';
 import './Menu.css';
 import MenuBar from './MenuBar';
 
-const Menu = () => {
+interface MenuProps {
+  openModal: () => void;
+}
+
+const Menu = ({ openModal }: MenuProps) => {
   const { selectedOption } = useMenuOptionContext();
 
   let content;
@@ -14,7 +18,7 @@ const Menu = () => {
   } else if (selectedOption === '업종 선택') {
     content = <BusinessSelect />;
   } else if (selectedOption === '분석 개요') {
-    content = <AnalysisOverview />;
+    content = <AnalysisOverview openModal={openModal} />;
   }
 
   return (

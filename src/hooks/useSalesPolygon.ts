@@ -66,7 +66,7 @@ const useSalesPolygon = ({ map, year }: UseSalesPolygonProps) => {
         if (selectedBusiness.id !== 0) {
           params.business_id = selectedBusiness.id;
         }
-        console.log(params);
+
         const salesData = await fetchSales(params);
         setSales(salesData);
 

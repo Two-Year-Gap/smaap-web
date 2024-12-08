@@ -1,0 +1,145 @@
+/* Modal Overlay */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.4);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+/* Modal Content */
+.modal-content {
+  width: 830px;
+  height: 700px;
+  background: #f0f7ff; /* 밝은 파란색 배경 */
+  border-radius: 16px;
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+  font-family: 'Arial', sans-serif;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  color: #004085; /* 진한 파란색 텍스트 */
+}
+
+/* Modal Header */
+.modal-header {
+  padding: 20px;
+  background-color: #0056b3; /* 밝은 파란색 */
+  border-bottom: 1px solid #d1e9ff; /* 연한 파란색 경계선 */
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  color: white;
+}
+.modal-header h2 {
+  font-size: 20px;
+  margin: 0;
+}
+
+.close-button {
+  background: none;
+  border: none;
+  font-size: 22px;
+  color: white;
+  cursor: pointer;
+  transition: color 0.3s;
+}
+.close-button:hover {
+  color: #0056b3; /* 진한 파란색 */
+}
+
+/* Modal Body */
+.modal-body {
+  padding: 20px;
+  overflow-y: auto;
+  background-color: #ffffff; /* 흰색 배경 */
+  flex-grow: 1;
+}
+
+/* Section Styling */
+section {
+  width: 100%;
+  margin-bottom: 20px;
+}
+
+section h3 {
+  margin-bottom: 12px;
+  font-size: 18px;
+  color: #0056b3; /* 진한 파란색 */
+  font-weight: bold;
+}
+
+/* Line Chart Container */
+.line-chart-container {
+  display: flex;
+  justify-content: center; /* 수평 중앙 정렬 */
+  align-items: center; /* 수직 중앙 정렬 */
+  padding: calc(25% - (100% * 0.2));
+  width: 100%;
+  aspect-ratio: 2/1;
+  margin-bottom: 20px;
+  background-color: #e9f4ff;
+  border: 1px solid #cde7ff;
+  border-radius: 12px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* Pie Chart Container */
+.pie-chart-container {
+  display: flex;
+  justify-content: center; /* 수평 중앙 정렬 */
+  align-items: center; /* 수직 중앙 정렬 */
+  padding: calc(25% - (100% * 0.2));
+  width: 100%;
+  aspect-ratio: 2/1;
+  background-color: #e9f4ff;
+  border: 1px solid #cde7ff;
+  border-radius: 12px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* Simple Analysis Buttons */
+.simple-analysis {
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.simple-analysis div {
+  flex: 1;
+  text-align: center;
+  padding: 14px;
+  background-color: #007bff; /* 밝은 파란색 */
+  border: 1px solid #0056b3; /* 진한 파란색 경계선 */
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  cursor: pointer;
+  color: white;
+  transition:
+    background-color 0.3s,
+    box-shadow 0.3s;
+}
+
+.simple-analysis div:hover {
+  background-color: #0056b3; /* 진한 파란색 */
+  color: white;
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+}
+
+.simple-analysis span {
+  display: block;
+  font-size: 16px;
+  font-weight: 600;
+}
+
+.simple-analysis span.value {
+  font-size: 16px;
+  font-weight: 400;
+  margin-top: 8px;
+  color: #ffffff; /* 흰색 텍스트 */
+}
