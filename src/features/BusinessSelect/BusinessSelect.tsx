@@ -1,21 +1,57 @@
+import { useEffect, useState } from 'react';
 import Btn from 'src/components/Button/Button';
 import { useBusinessContext } from 'src/contexts/BusinessContext';
-import { ReactComponent as AllIcon } from '../../assets/apps.svg';
-import { ReactComponent as SellIcon } from '../../assets/local_mall.svg';
-import { ReactComponent as EducationIcon } from '../../assets/mode_edit.svg';
-import { ReactComponent as FoodIcon } from '../../assets/restaurant.svg';
-import { ReactComponent as ServiceIcon } from '../../assets/volunteer_activism.svg';
+import { useMenuOptionContext } from 'src/contexts/MenuOptionContext';
+import { fetchBusinesses } from 'src/services/businessService';
+import { Business } from 'src/types/business';
+import { ReactComponent as AllIcon } from '../../assets/category/all.svg';
+import { ReactComponent as EducationIcon } from '../../assets/category/education.svg';
+import { ReactComponent as FoodIcon } from '../../assets/category/food.svg';
+import { ReactComponent as SellIcon } from '../../assets/category/sell.svg';
+import { ReactComponent as ServiceIcon } from '../../assets/category/service.svg';
 import './BusinessSelect.css';
 
+const businessesIcon = [
+  { id: 0, icon: <AllIcon /> },
+  { id: 1, icon: <FoodIcon /> },
+  { id: 2, icon: <ServiceIcon /> },
+  { id: 3, icon: <SellIcon /> },
+  { id: 4, icon: <EducationIcon /> },
+];
+
 const BusinessSelect = () => {
-  const { selectedCategory, setSelectedCategory } = useBusinessContext(); // Context 사용
-  const categories = [
-    { id: '전체', name: '전체', Icon: AllIcon },
-    { id: '요식업', name: '요식업', Icon: FoodIcon },
-    { id: '서비스업', name: '서비스업', Icon: ServiceIcon },
-    { id: '소매업', name: '소매업', Icon: SellIcon },
-    { id: '교육서비스업', name: '교육서비스업', Icon: EducationIcon },
-  ];
+  const { selectedBusiness, setSelectedBusiness } = useBusinessContext();
+  const { setSelectedOption } = useMenuOptionContext();
+  const [businesses, setBusinesses] = useState<Business[]>([]);
+
+  useEffect(() => {
+    const loadBusinesses = async () => {
+      try {
+        const fetchedBusinesses = await fetchBusinesses();
+
+        // 아이콘 매핑
+        const businessesWithIcons = fetchedBusinesses.map((business) => {
+          const iconObj = businessesIcon.find(
+            (item) => item.id === business.id,
+          );
+          return { ...business, icon: iconObj?.icon };
+        });
+
+        // "전체" 항목 추가
+        const allBusiness = {
+          id: 0,
+          name: '전체',
+          icon: businessesIcon.find((item) => item.id === 0)?.icon,
+        };
+
+        setBusinesses([allBusiness, ...businessesWithIcons]);
+      } catch (error) {
+        console.error('Load businesses error: ', error);
+      }
+    };
+
+    loadBusinesses();
+  }, []);
 
   return (
     <div className="business-select">
@@ -23,21 +59,26 @@ const BusinessSelect = () => {
         <div className="select-menu">
           <span className="select-title">업종</span>
           <div className="select-category-list">
-            {categories.map(({ id, name, Icon }) => (
+            {businesses.map((business) => (
               <div
-                key={id}
+                key={business.id}
                 className={`select-category-item ${
-                  selectedCategory === id ? 'selected' : ''
+                  selectedBusiness?.id === business.id ? 'selected' : ''
                 }`}
-                onClick={() => setSelectedCategory(id)}
+                onClick={() => setSelectedBusiness(business)}
               >
-                <Icon className="icon" />
-                <span>{name}</span>
+                {business.icon}
+                <span>{business.name}</span>
               </div>
             ))}
           </div>
         </div>
-        <Btn text="선택" />
+        <Btn
+          text="선택"
+          onClick={() => {
+            setSelectedOption('분석 개요');
+          }}
+        />
       </div>
     </div>
   );

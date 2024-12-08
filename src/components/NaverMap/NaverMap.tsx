@@ -1,88 +1,63 @@
-import { useEffect } from 'react';
-import { useMap } from 'src/contexts/MapContext';
+import { useAnalysisContext } from 'src/contexts/AnalysisContext';
+import { useMapContext } from 'src/contexts/MapContext';
+import { useSchoolContext } from 'src/contexts/SchoolContext';
 import useNaverMap from 'src/hooks/useNaverMap';
-import { useTM128 } from 'src/hooks/useTM128';
-import { schools } from '../../data/schools';
+import useRadiusModal from 'src/hooks/useRadiusModal';
+import useSchoolMarkers from 'src/hooks/useSchoolMarkers';
+import useSelectedSchoolRadius from 'src/hooks/useSelectedSchoolRadius';
+import useStoreMarkers from 'src/hooks/useStoreMarkers';
+import useWelfareInfraMarkers from 'src/hooks/useWelfareInfraMarkers';
+import { School } from 'src/types/schools';
+import RadiusModal from '../Modal/RadiusModal';
 import './NaverMap.css';
 
-type MenuOption = '학교 선택' | '업종 선택' | '분석 개요';
+const NaverMap = () => {
+  const { map } = useMapContext();
+  const { selectedSchool, setSelectedSchool } = useSchoolContext();
+  const { selectedAnalysisItem } = useAnalysisContext();
+  const { mapRef, loading } = useNaverMap(); // 지도 초기화
+  const { isModalOpen, radius, openModal, closeModal, changeRadius } =
+    useRadiusModal();
 
-interface NaverMapProps {
-  selected: MenuOption;
-}
+  const welfareInfraType =
+    selectedAnalysisItem === '안전비상벨'
+      ? 'EMERGENCY_BELL'
+      : selectedAnalysisItem === '안전지킴이집'
+        ? 'KEEPER_HOUSE'
+        : selectedAnalysisItem === 'CCTV'
+          ? 'CCTV'
+          : null;
 
-const NaverMap = ({ selected }: NaverMapProps) => {
-  const defaultCoordinates = { latitude: 35.8714, longitude: 128.6014 }; // 기본 좌표
-  const { mapRef, loading } = useNaverMap({
-    initialCoordinates: defaultCoordinates,
+  const handleMarkerClick = (school: School) => {
+    setSelectedSchool(school); // 학교 선택
+  };
+  const handleRadiusChange = (newRadius: number) => {
+    changeRadius(newRadius); // 반경 조절
+  };
+
+  // 학교 마커 표시
+  useSchoolMarkers({
+    map,
+    onModalOpen: openModal,
+    onMarkerClick: handleMarkerClick,
   });
-  const { map } = useMap();
-  const { toTM128 } = useTM128();
+  // 선택된 학교 처리
+  useSelectedSchoolRadius({ map, radius });
 
-  // 모든 학교에 마커 추가
-  useEffect(() => {
-    if (!map) return;
-
-    schools.forEach((school) => {
-      // WGS84 좌표를 TM128로 변환
-      const tm128Position = toTM128({
-        latitude: school.latitude,
-        longitude: school.longitude,
-      });
-
-      // 마커 생성
-      const marker = new window.naver.maps.Marker({
-        position: tm128Position,
-        map: map,
-      });
-
-      // 학교 이름을 표시하는 InfoWindow 생성
-      const infoWindow = new window.naver.maps.InfoWindow({
-        content: `<div class="info-window">${school.name}</div>`,
-        disableAutoPan: true,
-        borderWidth: 0,
-        backgroundColor: 'transparent',
-      });
-
-      // 마커 아래에 InfoWindow 표시
-      //infoWindow.open(map, marker);
-
-      // 마커 클릭 시 InfoWindow 열기
-      window.naver.maps.Event.addListener(marker, 'click', () => {
-        infoWindow.open(map, marker);
-      });
-    });
-  }, [map, schools]);
-  /*
-  // 특정 학교 선택 시 해당 좌표에만 500m 원 추가
-  useEffect(() => {
-    if (!map || !schoolCoordinates) return;
-
-    // 기존의 원을 제거
-    if (schoolCircle) {
-      schoolCircle.setMap(null);
-    }
-
-    const schoolLatLng = new window.naver.maps.LatLng(
-      schoolCoordinates.latitude,
-      schoolCoordinates.longitude,
-    );
-
-    // 새로운 500m 반경 원을 추가
-    const newCircle = new window.naver.maps.Circle({
-      map: map,
-      center: schoolLatLng,
-      radius: 500,
-      strokeColor: '#1d4fff',
-      strokeOpacity: 0.5,
-      strokeWeight: 2,
-      fillColor: '#60a5fa',
-      fillOpacity: 0.3,
-    });
-
-    setSchoolCircle(newCircle);
-  }, [map, schoolCoordinates, schoolCircle, toTM128]);
-  */
+  // 일반 마커 표시
+  useStoreMarkers({
+    map,
+    radius,
+    shouldExecute: selectedAnalysisItem === '점포수',
+  });
+  useWelfareInfraMarkers({
+    map,
+    radius,
+    type: welfareInfraType,
+    shouldExecute: Boolean(welfareInfraType), // Pass execution condition
+  });
+  //useSalesPolygon({ map, year: 2023 });
+  //usePopulationPolygon({ map, year: 2023 });
 
   return (
     <>
@@ -90,6 +65,15 @@ const NaverMap = ({ selected }: NaverMapProps) => {
         <div className="loading-overlay">지도를 불러오는 중입니다...</div>
       )}
       <div id="map" className="map" ref={mapRef}></div>
+
+      {isModalOpen && selectedSchool && (
+        <RadiusModal
+          school={selectedSchool}
+          radius={radius}
+          onClose={closeModal}
+          onRadiusChange={handleRadiusChange}
+        />
+      )}
     </>
   );
 };

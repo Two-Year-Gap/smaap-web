@@ -1,13 +1,12 @@
 import { useState } from 'react';
 import Btn from 'src/components/Button/Button';
-import { useSchoolContext } from 'src/contexts/SchoolContext';
 import SearchBar from '../SearchBar/SearchBar';
 import SchoolList from './SchoolList';
 import './SchoolSearch.css';
 
 const SchoolSearch = () => {
-  const { selectedSchool, setSelectedSchool } = useSchoolContext();
   const [isSearched, setIsSearched] = useState(false);
+  const [searchKeyword, setSearchKeyword] = useState(''); // 검색어 상태
 
   const handleSearch = () => {
     setIsSearched(true);
@@ -16,15 +15,14 @@ const SchoolSearch = () => {
   return (
     <div className="school-search">
       <div className="search-container">
-        <SearchBar />
+        <SearchBar
+          setSearchKeyword={setSearchKeyword}
+          handleSearch={handleSearch}
+          isSearched={isSearched}
+        />
         <Btn text="학교 검색" onClick={handleSearch} />
       </div>
-      {isSearched && (
-        <SchoolList
-          selectedSchool={selectedSchool}
-          setSelectedSchool={setSelectedSchool}
-        />
-      )}
+      {isSearched && <SchoolList name={searchKeyword} />}
     </div>
   );
 };

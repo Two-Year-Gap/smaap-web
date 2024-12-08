@@ -1,14 +1,13 @@
 // src/hooks/useNaverMap.ts
 import { useEffect, useRef, useState } from 'react';
-import { useMap } from 'src/contexts/MapContext';
+import { useMapContext } from 'src/contexts/MapContext';
 
-interface UseNaverMapOptions {
-  initialCoordinates: { latitude: number; longitude: number };
-}
+const defaultCoordinates = { latitude: 35.8714, longitude: 128.6014 }; // 기본 좌표
 
-const useNaverMap = ({ initialCoordinates }: UseNaverMapOptions) => {
+// 지도 초기화 (지도 생성 및 중심 설정)
+const useNaverMap = () => {
   const mapRef = useRef<HTMLDivElement>(null);
-  const { map, setMapInstance, userCoordinates } = useMap();
+  const { map, setMapInstance, userCoordinates } = useMapContext();
   const [loading, setLoading] = useState(true);
 
   // 스크립트 로드 후 지도 초기화 수행
@@ -16,7 +15,7 @@ const useNaverMap = ({ initialCoordinates }: UseNaverMapOptions) => {
     if (!mapRef.current || !window.naver || map) return; // 지도 초기화 한 번만 수행
 
     // 지도 생성
-    const initialCenter = userCoordinates || initialCoordinates;
+    const initialCenter = userCoordinates || defaultCoordinates;
     const newMap = new window.naver.maps.Map(mapRef.current, {
       center: new window.naver.maps.LatLng(
         initialCenter.latitude,
@@ -27,7 +26,7 @@ const useNaverMap = ({ initialCoordinates }: UseNaverMapOptions) => {
 
     setMapInstance(newMap); // 지도 인스턴스를 전역 상태로 설정
     setLoading(false); // 로딩 완료 처리
-  }, [setMapInstance, map, userCoordinates, initialCoordinates]);
+  }, [setMapInstance, map, userCoordinates]);
 
   // 사용자 위치로 지도 중심 설정
   useEffect(() => {

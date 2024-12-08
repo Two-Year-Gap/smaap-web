@@ -39,10 +39,23 @@ button {
   width: 100%;
   height: calc(100vh - 60px);
 }
+.map-container > .info-label {
+  position: absolute;
+  right: 60px;
+  z-index: 1;
+}
+.map-container > .info-label.school {
+  top: 100px;
+}
+.map-container > .info-label.business {
+  top: 170px;
+}
+.map-container > .info-label.analysis {
+  top: 240px;
+}
 
 .map-container > img {
   transform: scale(0.9); /* 이미지를 0.8배로 줄임 */
-  transform-origin: center; /* 이미지를 중앙 기준으로 축소 */
   position: absolute;
   top: 100px;
   right: 60px;

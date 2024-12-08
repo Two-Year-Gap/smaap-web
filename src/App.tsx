@@ -1,32 +1,17 @@
-import { useState } from 'react';
 import './App.css';
-import temp from './assets/temp.png';
-import temp2 from './assets/temp2.png';
 import DropdownBar from './components/Dropdown/DropdownBar';
 import Header from './components/Header/Header';
+import HotCommercial from './components/HotCommercial/HotCommercial';
+import AnalysisInfo from './components/InfoLabel/AnalysisInfo';
+import BusinessInfo from './components/InfoLabel/BusinessInfo';
+import SchoolInfo from './components/InfoLabel/SchoolInfo';
 import Menu from './components/Menu/Menu';
 import NaverMap from './components/NaverMap/NaverMap';
-
-type MenuOption = '학교 선택' | '업종 선택' | '분석 개요';
+import AnalysisReportModal from './features/AnalysisReport/AnalysisReportModal';
+import useModal from './hooks/useModal';
 
 const App = () => {
-  const [selected, setSelected] = useState<MenuOption>('학교 선택');
-
-  /*
-  선택한 학교셋 데이터 MapData로 포맷해서 전달.?
-  const handleSchoolSearch = (
-    latitude: number,
-    longitude: number,
-    name: string,
-  ) => {
-    setMapData({
-      type: '학교 검색',
-      coordinates: { latitude, longitude },
-      radius: 500,
-      school_name: name,
-    });
-  };
-  */
+  const { isOpen, openModal, closeModal } = useModal();
 
   return (
     <div className="layout">
@@ -35,11 +20,15 @@ const App = () => {
         <div className="dropdown-container">
           <DropdownBar />
         </div>
-        <NaverMap selected={selected} />
-        <Menu selected={selected} setSelected={setSelected} />
-        <img src={temp} alt="school-info" />
-        <img src={temp2} alt="range-modal" />
+        <NaverMap />
+        <Menu openModal={openModal} />
+        <HotCommercial />
+        <SchoolInfo />
+        <BusinessInfo />
+        <AnalysisInfo />
       </div>
+
+      {isOpen && <AnalysisReportModal onClose={closeModal} />}
     </div>
   );
 };

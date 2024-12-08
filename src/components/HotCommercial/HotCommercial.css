@@ -1,0 +1,63 @@
+.hot-commercial {
+  position: absolute;
+  top: 370px;
+  left: 60px;
+  z-index: 1;
+  background-color: #fff;
+  padding: 16px 16px 8px;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  font-family: Arial, sans-serif;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 4px;
+}
+
+.header h3 {
+  font-size: 16px;
+  font-weight: bold;
+  margin: 0;
+}
+
+.header p {
+  font-size: 12px;
+  color: #007bff;
+  margin: 0;
+}
+
+.neighborhood-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.neighborhood-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 8px;
+  border-radius: 4px;
+}
+
+.rank {
+  font-weight: bold;
+  color: #333;
+  width: 12px;
+}
+
+.name {
+  flex: 1;
+  font-size: 14px;
+  color: #333;
+}
+
+.count {
+  font-size: 14px;
+  color: #666;
+}

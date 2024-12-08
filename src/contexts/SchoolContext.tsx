@@ -1,17 +1,10 @@
 import { createContext, ReactNode, useContext, useState } from 'react';
+import { School } from 'src/types/schools';
 
 // 타입 정의
 interface SchoolContextType {
-  selectedSchool: {
-    name: string | null;
-    latitude: number | null;
-    longitude: number | null;
-  };
-  setSelectedSchool: (school: {
-    name: string;
-    latitude: number;
-    longitude: number;
-  }) => void;
+  selectedSchool: School | null;
+  setSelectedSchool: (school: School | null) => void;
 }
 
 // 기본값 설정
@@ -19,15 +12,7 @@ const SchoolContext = createContext<SchoolContextType | undefined>(undefined);
 
 // Provider 생성
 export const SchoolProvider = ({ children }: { children: ReactNode }) => {
-  const [selectedSchool, setSelectedSchool] = useState<{
-    name: string | null;
-    latitude: number | null;
-    longitude: number | null;
-  }>({
-    name: null,
-    latitude: null,
-    longitude: null,
-  });
+  const [selectedSchool, setSelectedSchool] = useState<School | null>(null);
 
   return (
     <SchoolContext.Provider value={{ selectedSchool, setSelectedSchool }}>
