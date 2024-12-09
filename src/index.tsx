@@ -21,6 +21,7 @@ import {
   Title,
   Tooltip,
 } from 'chart.js';
+import { DropdownProvider } from './contexts/DropdownContext';
 
 ChartJS.register(
   ArcElement, // Pie/Donut 차트에서 사용
@@ -57,19 +58,21 @@ const loadNaverMapScript = async () => {
   );
   root.render(
     <React.StrictMode>
-      <NeighborhoodProvider>
-        <MenuOptionProvider>
-          <MapProvider>
-            <SchoolProvider>
-              <BusinessProvider>
-                <AnalysisProvider>
-                  <App />
-                </AnalysisProvider>
-              </BusinessProvider>
-            </SchoolProvider>
-          </MapProvider>
-        </MenuOptionProvider>
-      </NeighborhoodProvider>
+      <DropdownProvider>
+        <NeighborhoodProvider>
+          <MenuOptionProvider>
+            <MapProvider>
+              <SchoolProvider>
+                <BusinessProvider>
+                  <AnalysisProvider>
+                    <App />
+                  </AnalysisProvider>
+                </BusinessProvider>
+              </SchoolProvider>
+            </MapProvider>
+          </MenuOptionProvider>
+        </NeighborhoodProvider>
+      </DropdownProvider>
     </React.StrictMode>,
   );
 })();

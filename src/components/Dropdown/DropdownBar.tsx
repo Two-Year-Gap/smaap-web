@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
-import { useNeighborhoodContext } from 'src/contexts/NeighborhoodContext';
+import { useDropdownContext } from 'src/contexts/DropdownContext';
+import { useSchoolContext } from 'src/contexts/SchoolContext';
 import {
   District,
   fetchDistricts,
@@ -10,10 +11,20 @@ import Dropdown from './Dropdown';
 import RootDropdown from './RootDropdown';
 
 const DropdownBar = () => {
+  const {
+    type,
+    setType,
+    gender,
+    setGender,
+    district,
+    setDistrict,
+    neighborhood,
+    setNeighborhood,
+  } = useDropdownContext();
+  const { selectedSchool } = useSchoolContext();
   const [districts, setDistricts] = useState<District[]>([]);
   const [neighborhoods, setNeighborhoods] = useState<Neighborhood[]>([]);
   const [selectedDistrict, setSelectedDistrict] = useState<number | null>(null);
-  const { neighborhoodId, setNeighborhoodId } = useNeighborhoodContext();
   const [isLoading, setIsLoading] = useState<boolean>(true);
 
   useEffect(() => {
@@ -35,7 +46,6 @@ const DropdownBar = () => {
   useEffect(() => {
     if (!selectedDistrict) {
       setNeighborhoods([]);
-      setNeighborhoodId(null);
       return;
     }
 
@@ -52,14 +62,47 @@ const DropdownBar = () => {
     };
 
     loadNeighborhoods();
-  }, [selectedDistrict, setNeighborhoodId]);
+  }, [selectedDistrict]);
 
-  const handleNeighborhoodChange = (value: string) => {
-    const selectedNeighborhood = neighborhoods.find(
-      (neighborhood) => neighborhood.name === value,
-    );
-    setNeighborhoodId(selectedNeighborhood ? selectedNeighborhood.id : null); // Context 상태 업데이트
-  };
+  useEffect(() => {
+    if (!selectedSchool) return;
+
+    // Update dropdowns when selectedSchool changes
+    const schoolType =
+      selectedSchool.type === 'HIGH'
+        ? '고등학교'
+        : selectedSchool.type === 'MIDDLE'
+          ? '중학교'
+          : '초등학교';
+
+    const schoolGender =
+      selectedSchool.gender === 'COEDUCATIONAL'
+        ? '남녀공학'
+        : selectedSchool.gender === 'BOYS_ONLY'
+          ? '남'
+          : '여';
+
+    const addressParts = selectedSchool.lotNumberAddress.split(' ');
+    const schoolDistrict = addressParts[1] || '전체';
+    const schoolNeighborhood = addressParts[2] || '전체';
+
+    setType(schoolType);
+    setGender(schoolGender);
+    setDistrict(schoolDistrict);
+    setNeighborhood(schoolNeighborhood);
+
+    const districtData = districts.find((d) => d.name === addressParts[1]);
+    if (districtData) {
+      setSelectedDistrict(districtData.id);
+    }
+  }, [
+    selectedSchool,
+    districts,
+    setType,
+    setGender,
+    setDistrict,
+    setNeighborhood,
+  ]);
 
   return (
     <div className="dropdown-bar-wrapper">
@@ -69,17 +112,23 @@ const DropdownBar = () => {
           <Dropdown
             label="학교 구분"
             items={['전체', '초등학교', '중학교', '고등학교']}
+            value={type}
+            onChange={(value) => setType(value)}
           />
           <Dropdown
             label="공학 구분"
             items={['전체', '남녀공학', '남', '여']}
+            value={gender}
+            onChange={(value) => setGender(value)}
           />
           <Dropdown
             label="구 구분"
             items={['전체', ...districts.map((district) => district.name)]}
+            value={district}
             onChange={(value) => {
               const district = districts.find((d) => d.name === value);
               setSelectedDistrict(district ? district.id : null);
+              setDistrict(value);
             }}
           />
           <Dropdown
@@ -88,7 +137,8 @@ const DropdownBar = () => {
               '전체',
               ...neighborhoods.map((neighborhood) => neighborhood.name),
             ]}
-            onChange={handleNeighborhoodChange} // Context 상태 업데이트
+            value={neighborhood}
+            onChange={(value) => setNeighborhood(value)}
           />
         </>
       )}
