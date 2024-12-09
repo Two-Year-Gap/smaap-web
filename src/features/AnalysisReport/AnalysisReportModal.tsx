@@ -513,18 +513,6 @@ const AnalysisReportModal = ({ onClose }: AnalysisReportModalProps) => {
               </div>
             </section>
 
-            {/* 생활인구 추이 */}
-            <section>
-              <h3>생활인구 추이</h3>
-              <div className="line-chart-container">
-                <Line
-                  data={populationLineData}
-                  options={lineChartOptions}
-                  plugins={[ChartDataLabels]}
-                />
-              </div>
-            </section>
-
             {/* 고객 유형 분석 */}
             <section>
               <h3>고객 유형 분석</h3>
@@ -532,6 +520,18 @@ const AnalysisReportModal = ({ onClose }: AnalysisReportModalProps) => {
                 <Pie
                   data={populationPieData}
                   options={pieChartOptions}
+                  plugins={[ChartDataLabels]}
+                />
+              </div>
+            </section>
+
+            {/* 생활인구 추이 */}
+            <section>
+              <h3>생활인구 추이</h3>
+              <div className="line-chart-container">
+                <Line
+                  data={populationLineData}
+                  options={lineChartOptions}
                   plugins={[ChartDataLabels]}
                 />
               </div>
