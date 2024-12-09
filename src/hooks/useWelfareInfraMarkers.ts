@@ -40,7 +40,6 @@ const useWelfareInfraMarkers = ({
 
   useEffect(() => {
     if (!shouldExecute || !selectedSchool || !selectedAnalysisItem) {
-      setWelfareInfras([]);
       return;
     }
 
@@ -52,13 +51,15 @@ const useWelfareInfraMarkers = ({
           longitude: selectedSchool.longitude,
           range: radius,
           type: type!,
+          size: 250,
         };
 
         const infraData = await fetchWelfareInfra(params);
+        console.log('welfare fetch: ', infraData);
+
         setWelfareInfras(infraData);
       } catch (error) {
         console.error('Error fetching welfare infra:', error);
-        setWelfareInfras([]);
       } finally {
         setIsLoading(false);
       }
