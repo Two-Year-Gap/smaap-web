@@ -79,9 +79,9 @@ section h3 {
   display: flex;
   justify-content: center; /* 수평 중앙 정렬 */
   align-items: center; /* 수직 중앙 정렬 */
-  padding: calc(25% - (100% * 0.2));
+  padding: 40px;
   width: 100%;
-  aspect-ratio: 2/1;
+  height: 400px;
   margin-bottom: 20px;
   background-color: #e9f4ff;
   border: 1px solid #cde7ff;
@@ -94,9 +94,9 @@ section h3 {
   display: flex;
   justify-content: center; /* 수평 중앙 정렬 */
   align-items: center; /* 수직 중앙 정렬 */
-  padding: calc(25% - (100% * 0.2));
+  padding: 40px;
   width: 100%;
-  aspect-ratio: 2/1;
+  height: 400px;
   background-color: #e9f4ff;
   border: 1px solid #cde7ff;
   border-radius: 12px;

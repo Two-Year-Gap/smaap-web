@@ -11,6 +11,7 @@ import {
   RecommendedBusiness,
 } from 'src/services/neighborhoodService';
 import { fetchPopulation, Population } from 'src/services/populationService';
+import { fetchPrediction, PredictResponse } from 'src/services/predictService';
 import { fetchDistricts, fetchNeighborhoods } from 'src/services/regionService';
 import { fetchSales, SalesData } from 'src/services/salesService';
 import './AnalysisReportModal.css';
@@ -19,6 +20,39 @@ Chart.register(...registerables, ChartDataLabels);
 interface AnalysisReportModalProps {
   onClose: () => void;
 }
+
+// 초기 데이터 설정
+const defaultPrediction = {
+  population: {
+    neighborhood_id: 45,
+    predicted_population: {
+      home: [
+        547.5, 649.5, 667.5, 639.1, 551.5, 456.8, 444.5, 460.2, 496.0, 537.7,
+        555.7, 581.7,
+      ],
+      total: [
+        722.5, 892.3, 950.6, 892.9, 735.1, 593.8, 564.0, 621.8, 691.6, 760.2,
+        797.5, 807.5,
+      ],
+      visit: [
+        89.2, 102.9, 125.4, 125.8, 121.8, 108.2, 112.0, 121.3, 119.9, 107.9,
+        113.5, 108.8,
+      ],
+      work: [
+        85.8, 139.9, 157.7, 128.1, 61.8, 28.9, 7.4, 40.3, 75.7, 114.6, 128.3,
+        117.0,
+      ],
+    },
+  },
+  revenue: {
+    business_id: 1,
+    neighborhood_id: 45,
+    predicted_revenue: [
+      366067.8, 328511.2, 357936.9, 344778.1, 345928.2, 337821.2, 338229.4,
+      358495.3, 346275.2, 352517.5, 338659.5, 320502.4,
+    ],
+  },
+};
 
 const AnalysisReportModal = ({ onClose }: AnalysisReportModalProps) => {
   const { selectedSchool } = useSchoolContext();
@@ -44,6 +78,8 @@ const AnalysisReportModal = ({ onClose }: AnalysisReportModalProps) => {
   const [populationTrends, setPopulationTrends] = useState<
     { year: number; data: Population }[]
   >([]);
+  const [predictions, setPredictions] =
+    useState<PredictResponse>(defaultPrediction);
   const [loading, setLoading] = useState<boolean>(true);
 
   useEffect(() => {
@@ -154,6 +190,16 @@ const AnalysisReportModal = ({ onClose }: AnalysisReportModalProps) => {
             data: populationResults[index],
           })),
         );
+
+        // Fetch Predictions
+        const params = {
+          neighborhood_id: neighborhoodId,
+          ...(selectedBusiness?.id !== 0 && {
+            business_id: selectedBusiness?.id,
+          }),
+        };
+        const predictionData = await fetchPrediction(params);
+        setPredictions(predictionData);
       } catch (error) {
         console.error('Error fetching data:', error);
       } finally {
@@ -170,6 +216,8 @@ const AnalysisReportModal = ({ onClose }: AnalysisReportModalProps) => {
       maximumFractionDigits: 2,
     });
 
+  const formatInt = (num: number) => Math.round(num).toLocaleString('en-US');
+
   if (loading) {
     return <div>데이터를 불러오는 중입니다...</div>;
   }
@@ -182,7 +230,7 @@ const AnalysisReportModal = ({ onClose }: AnalysisReportModalProps) => {
       tooltip: {
         callbacks: {
           label: (tooltipItem) =>
-            `${tooltipItem.dataset.label}: ${formatNumber(
+            `${tooltipItem.dataset.label}: ${formatInt(
               tooltipItem.raw as number,
             )}`,
         },
@@ -190,7 +238,7 @@ const AnalysisReportModal = ({ onClose }: AnalysisReportModalProps) => {
       datalabels: {
         display: true,
         color: '#000',
-        formatter: (value) => `${formatNumber(value)}`,
+        formatter: (value) => `${formatInt(value)}`,
       },
     },
   };
@@ -204,7 +252,7 @@ const AnalysisReportModal = ({ onClose }: AnalysisReportModalProps) => {
       tooltip: {
         callbacks: {
           label: function (tooltipItem) {
-            return `${tooltipItem.label}: ${tooltipItem.raw}%`;
+            return `${tooltipItem.label}: ${formatNumber(tooltipItem.raw as number)}%`;
           },
         },
       },
@@ -296,6 +344,57 @@ const AnalysisReportModal = ({ onClose }: AnalysisReportModalProps) => {
     ],
   };
 
+  const months = [
+    '1월',
+    '2월',
+    '3월',
+    '4월',
+    '5월',
+    '6월',
+    '7월',
+    '8월',
+    '9월',
+    '10월',
+    '11월',
+    '12월',
+  ];
+
+  const predictPopulationLineData = {
+    labels: months,
+    datasets: [
+      {
+        label: '거주인구',
+        data: predictions?.population.predicted_population.home,
+        borderColor: '#FF6384',
+        fill: false,
+      },
+      {
+        label: '유동인구',
+        data: predictions?.population.predicted_population.visit,
+        borderColor: '#36A2EB',
+        fill: false,
+      },
+      {
+        label: '직장인구',
+        data: predictions?.population.predicted_population.work,
+        borderColor: '#FFCE56',
+        fill: false,
+      },
+    ],
+  };
+
+  const predictRevenueLineData = {
+    labels: months,
+    datasets: [
+      {
+        label: '예상 매출',
+        data: predictions?.revenue.predicted_revenue,
+        borderColor: '#4BC0C0',
+        fill: false,
+      },
+    ],
+  };
+
   return (
     <div className="modal-overlay">
       {!loading && (
@@ -318,7 +417,7 @@ const AnalysisReportModal = ({ onClose }: AnalysisReportModalProps) => {
                 <div>
                   <span>점포수</span>
                   <span className="value">
-                    {formatNumber(
+                    {formatInt(
                       neighborhoodsByType.STORE.find(
                         (n) =>
                           n.name ===
@@ -331,7 +430,7 @@ const AnalysisReportModal = ({ onClose }: AnalysisReportModalProps) => {
                 <div>
                   <span>매출액</span>
                   <span className="value">
-                    {formatNumber(
+                    {formatInt(
                       neighborhoodsByType.SALES.find(
                         (n) =>
                           n.name ===
@@ -344,7 +443,7 @@ const AnalysisReportModal = ({ onClose }: AnalysisReportModalProps) => {
                 <div>
                   <span>유동인구</span>
                   <span className="value">
-                    {formatNumber(
+                    {formatInt(
                       neighborhoodsByType.FLOATING.find(
                         (n) =>
                           n.name ===
@@ -357,7 +456,7 @@ const AnalysisReportModal = ({ onClose }: AnalysisReportModalProps) => {
                 <div>
                   <span>거주인구</span>
                   <span className="value">
-                    {formatNumber(
+                    {formatInt(
                       neighborhoodsByType.RESIDENT.find(
                         (n) =>
                           n.name ===
@@ -402,6 +501,17 @@ const AnalysisReportModal = ({ onClose }: AnalysisReportModalProps) => {
                 />
               </div>
             </section>
+            {/* 예상 매출 */}
+            <section>
+              <h3>예상 매출</h3>
+              <div className="line-chart-container">
+                <Line
+                  data={predictRevenueLineData}
+                  options={lineChartOptions}
+                  plugins={[ChartDataLabels]}
+                />
+              </div>
+            </section>
 
             {/* 생활인구 추이 */}
             <section>
@@ -422,6 +532,17 @@ const AnalysisReportModal = ({ onClose }: AnalysisReportModalProps) => {
                 <Pie
                   data={populationPieData}
                   options={pieChartOptions}
+                  plugins={[ChartDataLabels]}
+                />
+              </div>
+            </section>
+            {/* 향후 생활인구 예측 */}
+            <section>
+              <h3>향후 생활인구 예측</h3>
+              <div className="line-chart-container">
+                <Line
+                  data={predictPopulationLineData}
+                  options={lineChartOptions}
                   plugins={[ChartDataLabels]}
                 />
               </div>

@@ -5,6 +5,7 @@ export interface WelfareInfraApiParams {
   longitude: number;
   range: number;
   type?: 'EMERGENCY_BELL' | 'KEEPER_HOUSE' | 'CCTV';
+  size: number;
 }
 
 export interface WelfareInfra {
