@@ -304,7 +304,7 @@ const AnalysisReportModal = ({ onClose }: AnalysisReportModalProps) => {
     labels: ['2021', '2022', '2023'],
     datasets: [
       {
-        label: '유동인구',
+        label: '방문인구',
         data: populationTrends.map((p) => p.data.visitPopulation),
         borderColor: '#FF6384',
         fill: false,
@@ -331,7 +331,7 @@ const AnalysisReportModal = ({ onClose }: AnalysisReportModalProps) => {
     (population2023?.workPopulation || 0) +
     (population2023?.homePopulation || 0);
   const populationPieData = {
-    labels: ['유동인구', '직장인구', '거주인구'],
+    labels: ['방문인구', '직장인구', '거주인구'],
     datasets: [
       {
         data: [
@@ -369,7 +369,7 @@ const AnalysisReportModal = ({ onClose }: AnalysisReportModalProps) => {
         fill: false,
       },
       {
-        label: '유동인구',
+        label: '방문인구',
         data: predictions?.population.predicted_population.visit,
         borderColor: '#36A2EB',
         fill: false,
@@ -513,18 +513,6 @@ const AnalysisReportModal = ({ onClose }: AnalysisReportModalProps) => {
               </div>
             </section>
 
-            {/* 고객 유형 분석 */}
-            <section>
-              <h3>고객 유형 분석</h3>
-              <div className="pie-chart-container">
-                <Pie
-                  data={populationPieData}
-                  options={pieChartOptions}
-                  plugins={[ChartDataLabels]}
-                />
-              </div>
-            </section>
-
             {/* 생활인구 추이 */}
             <section>
               <h3>생활인구 추이</h3>
@@ -532,6 +520,18 @@ const AnalysisReportModal = ({ onClose }: AnalysisReportModalProps) => {
                 <Line
                   data={populationLineData}
                   options={lineChartOptions}
+                  plugins={[ChartDataLabels]}
+                />
+              </div>
+            </section>
+
+            {/* 고객 유형 분석 */}
+            <section>
+              <h3>고객 유형 분석</h3>
+              <div className="pie-chart-container">
+                <Pie
+                  data={populationPieData}
+                  options={pieChartOptions}
                   plugins={[ChartDataLabels]}
                 />
               </div>
