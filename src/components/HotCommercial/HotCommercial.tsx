@@ -18,19 +18,26 @@ const HotCommercial = () => {
   // Mapping of AnalysisItem to API `type` values
   const analysisTypeMapping: Record<
     AnalysisItem,
-    NeighborhoodsApiParams['type'] | null
+    {
+      type: NeighborhoodsApiParams['type'] | null;
+      unit: string;
+      divideBy?: number;
+    }
   > = {
-    점포수: 'STORE',
-    매출액: 'SALES',
-    유동인구: 'FLOATING',
-    거주인구: 'RESIDENT',
-    안전비상벨: null,
-    안전지킴이집: null,
-    CCTV: null,
+    점포수: { type: 'STORE', unit: '개' },
+    매출액: { type: 'SALES', unit: '만 원', divideBy: 10000 },
+    유동인구: { type: 'FLOATING', unit: '명' },
+    거주인구: { type: 'RESIDENT', unit: '명' },
+    안전비상벨: { type: null, unit: '' },
+    안전지킴이집: { type: null, unit: '' },
+    CCTV: { type: null, unit: '' },
   };
 
   // Determine the API type based on the selectedAnalysisItem
-  const apiType = analysisTypeMapping[selectedAnalysisItem!];
+  const analysisMapping = analysisTypeMapping[selectedAnalysisItem!];
+  const apiType = analysisMapping?.type;
+  const unit = analysisMapping?.unit || '';
+  const divideBy = analysisMapping?.divideBy || 1;
 
   useEffect(() => {
     // Reset state when AnalysisItem changes
@@ -74,7 +81,10 @@ const HotCommercial = () => {
     <div className="hot-commercial">
       <div className="header">
         <h3>지금 핫한 상권</h3>
-        <p>{selectedAnalysisItem} 기준</p>
+        <div>
+          <p>{selectedAnalysisItem} 기준</p>
+          <span>단위: {unit}</span>
+        </div>
       </div>
 
       {!loading ? (
@@ -84,7 +94,9 @@ const HotCommercial = () => {
               <span className="rank">{index + 1}</span>
               <span className="name">{neighborhood.name}</span>
               <span className="count">
-                {neighborhood.count.toLocaleString() || '-'}
+                {divideBy > 1
+                  ? Math.round(neighborhood.count / divideBy).toLocaleString()
+                  : neighborhood.count.toLocaleString() || '-'}
               </span>
             </li>
           ))}

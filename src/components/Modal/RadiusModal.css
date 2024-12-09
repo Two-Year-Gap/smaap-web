@@ -20,9 +20,14 @@
   width: 300px;
 }
 
+.radius-controls {
+  display: flex;
+  gap: 10px;
+  margin-top: 8px;
+}
 .radius-controls button {
-  margin: 5px;
-  padding: 10px 20px;
+  width: 80px;
+  padding: 10px;
   border: none;
   border-radius: 4px;
   background: #007bff;
@@ -38,7 +43,7 @@
   margin-top: 10px;
   background: #ff4d4d;
   color: white;
-  padding: 10px 20px;
+  padding: 6px 20px;
   border: none;
   border-radius: 4px;
   cursor: pointer;
