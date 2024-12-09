@@ -1,4 +1,4 @@
-import axiosInstance from 'src/apis/axiosInstance';
+import axios from 'axios';
 
 export interface PredictApiParams {
   neighborhood_id: number;
@@ -26,7 +26,7 @@ export const fetchPrediction = async (
   params: PredictApiParams,
 ): Promise<PredictResponse> => {
   try {
-    const response = await axiosInstance.post('/predict', params, {
+    const response = await axios.post('https://smaap.xyz/predict', params, {
       headers: {
         'Content-Type': 'application/json',
       },

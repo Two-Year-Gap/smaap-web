@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { ReactComponent as ArrowDownIcon } from '../../assets/arrow_down.svg';
 import './Dropdown.css';
 import DropdownItem from './DropdownItem';
@@ -12,32 +12,21 @@ interface DropdownProps {
 
 const Dropdown = ({ label, items, value, onChange }: DropdownProps) => {
   const [isOpen, setIsOpen] = useState(false);
-  const [selectedItem, setSelectedItem] = useState(value || items[0]);
   const [isFirstRender, setIsFirstRender] = useState(true); // 초기 렌더링 여부 상태
-
-  // 외부 value 값이 변경되면 selectedItem 상태를 업데이트
-  useEffect(() => {
-    if (value !== undefined && value !== selectedItem) {
-      setSelectedItem(value);
-    }
-  }, [value, selectedItem]);
 
   const toggleDropdown = () => setIsOpen(!isOpen);
   const handleSelect = (item: string) => {
-    setSelectedItem(item);
-    setIsOpen(false);
-    setIsFirstRender(false); // 첫 렌더링 후 상태를 false로 업데이트
-
-    // onChange 이벤트 발생
     if (onChange) {
       onChange(item); // 선택된 값을 부모 컴포넌트로 전달
     }
+    setIsOpen(false);
+    setIsFirstRender(false); // 첫 렌더링 후 상태를 false로 업데이트
   };
 
   return (
     <div className="dropdown">
       <button onClick={toggleDropdown} className="dropdown-label">
-        <span>{isFirstRender ? label : selectedItem}</span>
+        <span>{isFirstRender ? label : value}</span>
         <ArrowDownIcon />
       </button>
       {isOpen && (
