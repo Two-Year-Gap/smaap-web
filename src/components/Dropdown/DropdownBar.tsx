@@ -44,10 +44,7 @@ const DropdownBar = () => {
   }, []);
 
   useEffect(() => {
-    if (!selectedDistrict) {
-      setNeighborhoods([]);
-      return;
-    }
+    if (!selectedDistrict) return;
 
     const loadNeighborhoods = async () => {
       try {
@@ -83,8 +80,8 @@ const DropdownBar = () => {
           : '여';
 
     const addressParts = selectedSchool.lotNumberAddress.split(' ');
-    const schoolDistrict = addressParts[1] || '전체';
-    const schoolNeighborhood = addressParts[2] || '전체';
+    const schoolDistrict = addressParts[1];
+    const schoolNeighborhood = addressParts[2];
 
     setType(schoolType);
     setGender(schoolGender);
@@ -104,6 +101,15 @@ const DropdownBar = () => {
     setNeighborhood,
   ]);
 
+  const handleTypeChange = (value: string) => setType(value);
+  const handleGenderChange = (value: string) => setGender(value);
+  const handleDistrictChange = (value: string) => {
+    const district = districts.find((d) => d.name === value);
+    setSelectedDistrict(district ? district.id : null);
+    setDistrict(value);
+  };
+  const handleNeighborhoodChange = (value: string) => setNeighborhood(value);
+
   return (
     <div className="dropdown-bar-wrapper">
       <RootDropdown />
@@ -113,23 +119,19 @@ const DropdownBar = () => {
             label="학교 구분"
             items={['전체', '초등학교', '중학교', '고등학교']}
             value={type}
-            onChange={(value) => setType(value)}
+            onChange={handleTypeChange}
           />
           <Dropdown
             label="공학 구분"
             items={['전체', '남녀공학', '남', '여']}
             value={gender}
-            onChange={(value) => setGender(value)}
+            onChange={handleGenderChange}
           />
           <Dropdown
             label="구 구분"
             items={['전체', ...districts.map((district) => district.name)]}
             value={district}
-            onChange={(value) => {
-              const district = districts.find((d) => d.name === value);
-              setSelectedDistrict(district ? district.id : null);
-              setDistrict(value);
-            }}
+            onChange={handleDistrictChange}
           />
           <Dropdown
             label="동 구분"
@@ -138,7 +140,7 @@ const DropdownBar = () => {
               ...neighborhoods.map((neighborhood) => neighborhood.name),
             ]}
             value={neighborhood}
-            onChange={(value) => setNeighborhood(value)}
+            onChange={handleNeighborhoodChange}
           />
         </>
       )}
