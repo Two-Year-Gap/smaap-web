@@ -12,7 +12,6 @@ interface DropdownProps {
 
 const Dropdown = ({ label, items, value, onChange }: DropdownProps) => {
   const [isOpen, setIsOpen] = useState(false);
-  const [isFirstRender, setIsFirstRender] = useState(true); // 초기 렌더링 여부 상태
 
   const toggleDropdown = () => setIsOpen(!isOpen);
   const handleSelect = (item: string) => {
@@ -20,13 +19,12 @@ const Dropdown = ({ label, items, value, onChange }: DropdownProps) => {
       onChange(item); // 선택된 값을 부모 컴포넌트로 전달
     }
     setIsOpen(false);
-    setIsFirstRender(false); // 첫 렌더링 후 상태를 false로 업데이트
   };
 
   return (
     <div className="dropdown">
       <button onClick={toggleDropdown} className="dropdown-label">
-        <span>{isFirstRender ? label : value}</span>
+        <span>{value === '전체' && isOpen ? label : value}</span>
         <ArrowDownIcon />
       </button>
       {isOpen && (
